@@ -1,15 +1,22 @@
 {
   "name": "api-papeleria",
   "version": "1.0.0",
-  "description": "Api para el control de inventario",
+  "description": "api para el control inventario",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Grupo G59-04",
   "license": "ISC",
   "dependencies": {
-    "expres": "^0.0.5"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
