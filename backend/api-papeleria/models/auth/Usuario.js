@@ -1,55 +1,68 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const usuarioSchema = mongoose.Schema({
-    idRol:{
+    idRol: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Rol",
         require: true,
         trim: true
     },
-    nombresUsuario:{
+    nombresUsuario: {
         type: String,
         require: true,
         trim: true
     },
-    apellidosUsuario:{
+    apellidosUsuario: {
         type: String,
         require: true,
         trim: true
     },
-    celularUsuario:{
+    celularUsuario: {
         type: Number,
         require: true,
         trim: true
     },
-    correoUsuario:{
+    correoUsuario: {
         type: String,
         require: true,
         trim: true
     },
-    direccionUsuario:{
+    direccionUsuario: {
         type: String,
         require: true,
         trim: true
     },
-    usuarioAcceso:{
+    usuarioAcceso: {
         type: String,
         require: true,
         trim: true,
         unique: true
     },
-    claveAcceso:{
+    claveAcceso: {
         type: String,
         require: true,
         trim: true
     },
-    estadoUsuario:{
+    estadoUsuario: {
         type: Number,
         require: true,
         trim: true
     },
-},{
-    timestamps:true
+}, {
+    timestamps: true
 });
-const Usuario = mongoose.model("Usuario",usuarioSchema);
+usuarioSchema.pre('save', async function (next){
+    if (!this.isModified("claveAcceso")){
+        next();
+    }
+    const salt = await bcrypt.genSalt(12);
+    this.claveAcceso = await bcrypt.hash(this.claveAcceso, salt);
+});
+usuarioSchema.methods.comprobarClave = async function(claveFormulario) {
+    return await bcrypt.compare(claveFormulario, this.claveAcceso);
+}
+
+
+const Usuario = mongoose.model("Usuario", usuarioSchema);
 export default Usuario;
